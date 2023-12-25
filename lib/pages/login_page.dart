@@ -182,6 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                         emailController.clear();
                         passwordController.clear();
+                        AppRoutes.homeScreen.pushName();
                       }
                           : null,
                       style: const ButtonStyle().copyWith(

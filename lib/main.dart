@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:petlover/pages/home_page.dart';
 
 import 'values/app_theme.dart';
 import 'pages/login_page.dart';
@@ -31,13 +32,14 @@ class MyApp extends StatelessWidget {
     Theme.of(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Login and Register UI',
+      title: 'PetLover',
       theme: AppTheme.themeData,
       initialRoute: AppRoutes.loginScreen,
       navigatorKey: AppConstants.navigationKey,
       routes: {
         AppRoutes.loginScreen: (context) => const LoginPage(),
         AppRoutes.registerScreen: (context) => const RegisterPage(),
+        AppRoutes.homeScreen: (context) => const HomePage (),
       },
     );
   }
