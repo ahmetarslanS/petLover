@@ -102,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 color: Colors.pink.withOpacity(0.5),
                                 spreadRadius: 3,
                                 blurRadius: 5,
-                                offset: Offset(0, 4),
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),

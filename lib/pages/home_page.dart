@@ -1,10 +1,31 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:petlover/pages/camera_page.dart';
 import 'package:petlover/values/app_colors.dart';
-import 'package:petlover/values/app_theme.dart';
 import '../utils/extensions.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:petlover/values/app_routes.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(38.38866, 27.04457);
+
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +68,13 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   height: size.height * 0.35,
-                  child: const Center(
-                    child: Text('Map'),
+
+                    child: const GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      //Coordinates for Izmir University of Economics
+                      target:  LatLng(38.38866, 27.04457),
+                      zoom: 11.0,
+                    ),
                   ),
                 ),
                 Container(
@@ -72,7 +98,7 @@ class HomePage extends StatelessWidget {
                       width: 1,
                     ),
                   ),
-                  height: size.height * 0.364,
+                  height: size.height * 0.293,
                   padding: const EdgeInsets.all(10.0),
                   child: const Text('Top Rescuers',
                       style: TextStyle(fontSize: 20)),
@@ -91,7 +117,7 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: [
-                  IconButton(icon: Icon(Icons.settings), onPressed: () {}, iconSize: 30,),
+                  IconButton(icon: const Icon(Icons.settings), onPressed: () {}, iconSize: 34,),
                   const Text('Settings', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
@@ -100,22 +126,28 @@ class HomePage extends StatelessWidget {
                 thickness: 2,
               ),
               ElevatedButton(
-                onPressed: () {},
-                child: Icon(Icons.pets),
+                onPressed: () async {
+                  await availableCameras().then(
+                        (value) => Navigator.push(
+                        context, MaterialPageRoute(
+                        builder: (_) => CameraPage(cameras: value))
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(70, 70),
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(10),
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(10),
                 ),
+                child: const Icon(Icons.pets,),
               ),
               const VerticalDivider(
                 color: Colors.black54,
                 thickness: 2,
-
               ),
               Column(
                 children: [
-                  IconButton(icon: Icon(Icons.person), onPressed: () {}, iconSize: 30,
+                  IconButton(icon: const Icon(Icons.person), onPressed: () {}, iconSize: 34,
                   ),
                   const Text('Profile', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],

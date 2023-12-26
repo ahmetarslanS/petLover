@@ -3,6 +3,11 @@
         android:label="petlover"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyBt1mx52d7q-hUQA0q7JAWNnJF82t_G9Cg"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

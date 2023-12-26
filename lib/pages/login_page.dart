@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(13),
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 12,
+                        height: 3,
                       ),
                       Container(
                         width: size.width * 0.5,

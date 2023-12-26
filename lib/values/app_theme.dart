@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:petlover/main.dart';
 
 import 'app_colors.dart';
 
