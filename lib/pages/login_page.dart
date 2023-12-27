@@ -1,6 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petlover/values/app_routes.dart';
-
 import '../components/app_text_form_field.dart';
 import '../utils/extensions.dart';
 import '../values/app_colors.dart';
@@ -14,6 +14,45 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  static Future<User?> loginUsingEmailAndPassword(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      user = userCredential.user;
+      if (user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Logged In!'),
+            duration: Duration(seconds: 3), // Adjust the duration as needed
+          ),
+        );
+        // Navigate to the HomeScreen
+        //Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreen);
+        AppRoutes.homeScreen.pushName();
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("No user found for that email."),
+          ),
+        );
+      } else if (e.code == "wrong-password") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Wrong password provided for that user."),
+          ),
+        );
+      }
+    }
+    return user;
+  }
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -52,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
-                           boxShadow: [
-                             BoxShadow(
-                               color: Colors.pink,
-                               spreadRadius: 3,
-                               blurRadius: 5,
-                               offset: Offset(0, 0),
-                             ),
-                           ],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.pink,
+                              spreadRadius: 3,
+                              blurRadius: 5,
+                              offset: Offset(0, 0),
+                            ),
+                          ],
                         ),
                         child: Image.asset(
                           'lib/assets/paw.png',
@@ -99,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
@@ -115,8 +154,8 @@ class _LoginPageState extends State<LoginPage> {
                         return value!.isEmpty
                             ? 'Please enter Email Address'
                             : AppConstants.emailRegex.hasMatch(value)
-                            ? null
-                            : 'Invalid Email Address';
+                                ? null
+                                : 'Invalid Email Address';
                       },
                       controller: emailController,
                     ),
@@ -131,8 +170,8 @@ class _LoginPageState extends State<LoginPage> {
                         return value!.isEmpty
                             ? 'Please enter Password'
                             : AppConstants.passwordRegex.hasMatch(value)
-                            ? null
-                            : 'Invalid Password';
+                                ? null
+                                : 'Invalid Password';
                       },
                       controller: passwordController,
                       obscureText: isObscure,
@@ -159,32 +198,43 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        AppRoutes.forgotPasswordScreen.pushName();
+                      },
                       style: Theme.of(context).textButtonTheme.style,
                       child: Text(
                         'Forgot Password?',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
                     const SizedBox(
                       height: 15,
                     ),
                     FilledButton(
-                      onPressed: _formKey.currentState?.validate() ?? false
-                          ? () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Logged In!'),
-                          ),
-                        );
-                        emailController.clear();
-                        passwordController.clear();
-                        AppRoutes.homeScreen.pushName();
-                      }
-                          : null,
+                      onPressed:
+                          _formKey.currentState?.validate() ?? false
+                              ? () async {
+                                 User? user = await loginUsingEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    context: context,
+                                  );
+                                  if(user!= null){
+                                    AppRoutes.homeScreen.pushName();
+                                  }else if(user == null){
+                                    setState(() {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text("Wrong email or password!"),
+                                        ),
+                                      );
+                                    });
+                                  }
+                                }
+                              : null,
                       style: const ButtonStyle().copyWith(
                         backgroundColor: MaterialStateProperty.all(
                           _formKey.currentState?.validate() ?? false
@@ -219,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -236,9 +286,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         'Register',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
                   ],

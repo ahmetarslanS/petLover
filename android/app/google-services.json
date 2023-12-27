@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "851203059837",
+    "project_id": "petlover-c9863",
+    "storage_bucket": "petlover-c9863.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851203059837:android:aa84b91f1d15a92ea74114",
+        "android_client_info": {
+          "package_name": "com.example.petlover"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVCVWDb0TOdFgbFnkj6fsJn5BMCP-Gq2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -49,5 +49,8 @@
     <string>This app needs access to camera when used</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>This app needs access to microphone when used</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Your description about camera usage</string>
+
 </dict>
 </plist>

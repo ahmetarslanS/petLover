@@ -4,5 +4,6 @@ class AppRoutes {
   static const String homeScreen = '/home';
   static const String cameraScreen = '/camera';
   static const String previewScreen = '/preview';
+  static const String forgotPasswordScreen = '/forgot-password';
 
 }

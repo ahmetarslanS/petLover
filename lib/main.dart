@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:petlover/pages/forget_password.dart';
 import 'package:petlover/pages/home_page.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'values/app_theme.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
 import 'values/app_constants.dart';
 import 'values/app_routes.dart';
 
-void main() {
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.light,
@@ -40,6 +46,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.loginScreen: (context) => const LoginPage(),
         AppRoutes.registerScreen: (context) => const RegisterPage(),
         AppRoutes.homeScreen: (context) => const HomePage (),
+        AppRoutes.forgotPasswordScreen: (context) => ForgotPasswordPage(),
       },
     );
   }

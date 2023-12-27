@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/app_text_form_field.dart';
@@ -22,6 +23,44 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool isObscure = true;
   bool isConfirmPasswordObscure = true;
+  Future<void> registerWithEmailAndPassword(
+      String email, String password, String name, BuildContext context) async {
+    try {
+      UserCredential userCredential =
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Update user display name
+      await userCredential.user!.updateDisplayName(name);
+
+      // Retrieve user display name
+      String? displayName = FirebaseAuth.instance.currentUser?.displayName;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registration Successful!'),
+          duration: Duration(seconds: 3), // Adjust the duration as needed
+        ),
+      );
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('The password provided is too weak.'),
+          ),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('The account already exists for that email.'),
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +206,28 @@ class _RegisterPageState extends State<RegisterPage> {
                           : 'Invalid Password';
                     },
                     controller: passwordController,
+                    obscureText: isObscure,
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isObscure = !isObscure;
+                          });
+                        },
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(48, 48),
+                          ),
+                        ),
+                        icon: Icon(
+                          isObscure
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ),
                   AppTextFormField(
                     labelText: 'Confirm Password',
@@ -187,19 +248,38 @@ class _RegisterPageState extends State<RegisterPage> {
                           : 'Invalid Password!';
                     },
                     controller: confirmPasswordController,
+                    obscureText: isConfirmPasswordObscure,
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isConfirmPasswordObscure = !isConfirmPasswordObscure;
+                          });
+                        },
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                            const Size(48, 48),
+                          ),
+                        ),
+                        icon: Icon(
+                          isConfirmPasswordObscure
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ),
                   FilledButton(
                     onPressed: _formKey.currentState?.validate() ?? false
                         ? () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Registration Complete!'),
-                        ),
+                      registerWithEmailAndPassword(
+                        emailController.text,
+                        passwordController.text,
+                        nameController.text,
+                        context,
                       );
-                      nameController.clear();
-                      emailController.clear();
-                      passwordController.clear();
-                      confirmPasswordController.clear();
                     }
                         : null,
                     style: const ButtonStyle().copyWith(

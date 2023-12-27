@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:petlover/pages/upload_animal.dart';
 import 'dart:io';
 
 import 'package:petlover/values/app_colors.dart';
@@ -31,7 +32,7 @@ class PreviewPage extends StatelessWidget {
           Image.file(File(picture.path), fit: BoxFit.cover, width: 320),
           const SizedBox(height: 30),
           Text(picture.name),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
          //Make the ElevatedButtons side by side
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -44,7 +45,13 @@ class PreviewPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              //TODO: Create a new page to select pet type etc.
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UploadAnimalPage(),
+                ),
+              );
+
             },
             child: const Text('Use Photo'),
           ),

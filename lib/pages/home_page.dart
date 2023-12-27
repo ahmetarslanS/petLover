@@ -1,10 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:petlover/pages/camera_page.dart';
+import 'package:petlover/pages/profile_page.dart';
 import 'package:petlover/values/app_colors.dart';
 import '../utils/extensions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:petlover/values/app_routes.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -23,10 +23,6 @@ class _HomePageState extends State<HomePage> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final size = context.mediaQuerySize;
@@ -147,7 +143,11 @@ class _HomePageState extends State<HomePage> {
               ),
               Column(
                 children: [
-                  IconButton(icon: const Icon(Icons.person), onPressed: () {}, iconSize: 34,
+                  IconButton(icon: const Icon(Icons.person), onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserProfilePage()));
+                  }, iconSize: 34,
                   ),
                   const Text('Profile', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
